@@ -1,4 +1,4 @@
-# projeto-sistemas-lineares-I
+# projeto-sistemas-digitais-I
 
 This repository contain the second Sistemas Lineares' project of 2021.1 
 
