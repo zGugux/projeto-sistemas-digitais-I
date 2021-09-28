@@ -1,5 +1,4 @@
 -- Arquivo que contém o fullAdder BCD
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -14,13 +13,9 @@ entity fullAdderBCD is
 
 end fullAdderBCD;
 
--- As entradas foram projetadas para receber dois números BCD. 
--- Sendo A e B a dezena e a unidade respectivamente do primeiro número
--- e C e D a dezena e a unidade respectivamente do segundo número.
-
 architecture arc_fullAdderBCD of fullAdderBCD  is
 
-    signal resultado         : std_logic_vector ( 3 downto 0);
+    signal resultado, aux         : std_logic_vector ( 4 downto 0);
 
 begin
 
@@ -28,20 +23,21 @@ begin
 
     begin
     
-        resultado <= (A + B + carryIn);
+        resultado <= ( ('0' & A) + ( '0' & B)  + carryIn);
 
         if( resultado > 9) then
 
-            C <= resultado + "0110";
+            aux <= resultado + "00110";
+            C <= aux(3 downto 0);
             carryOut <= '1';
 
         else
 
-            C <= resultado;
+            C <= resultado(3 downto 0);
             carryOut <= '0';
 
         end if;
-    end process;
 
+    end process;
 
 end arc_fullAdderBCD;
