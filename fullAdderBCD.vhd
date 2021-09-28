@@ -1,59 +1,47 @@
 -- Arquivo que contém o fullAdder BCD
 
 library ieee;
-use ieee.std_logic_1164.ALL;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
 
-entity fullAdderBCD2 is
-
+entity fullAdderBCD is
     port (
-        A,B,C,D  : in std_logic_vector( 3 downto 0); --entradas em BCD. DU e DU
+        A,B  : in std_logic_vector( 3 downto 0); 
         carryIn  : in std_logic;
-        E,F      : out std_logic_vector( 3 downto 0);
+        C      : out std_logic_vector( 3 downto 0);
         carryOut : out std_logic
     );
 
-end fullAdderBCD2;
+end fullAdderBCD;
 
 -- As entradas foram projetadas para receber dois números BCD. 
 -- Sendo A e B a dezena e a unidade respectivamente do primeiro número
 -- e C e D a dezena e a unidade respectivamente do segundo número.
 
-architecture arc_fullAdderBCD of fullAdderBCD2  is
+architecture arc_fullAdderBCD of fullAdderBCD  is
 
-	component fullADDER4bits
-    port ( A,B: in std_logic_vector (3 downto 0);
-             Cin: in std_logic;
-             S: out std_logic_vector (3 downto 0);
-             Cout: out std_logic
-        );
-    end component;
+    signal resultado         : std_logic_vector ( 3 downto 0);
 
-    component fatorCorrecao
-    port ( dezena, unidade: in std_logic_vector (3 downto 0);
-             carryIn: in std_logic;
-             E,F : out std_logic_vector (3 downto 0);
-             carryOut: out std_logic
-        );
-    end component;
+begin
 
-    signal carry_unidade, carry_dezena, carry_out : std_logic;
---    signal verificacao_unidade, verificacao_dezena: std_logic;
-    signal saida1: std_logic_vector ( 3 downto 0);
-    signal saida2: std_logic_vector ( 3 downto 0);
---    signal aux: std_logic_vector( 3 downto 0);
+    process (A,B,carryIn)
 
     begin
-
-    carry_unidade <= carryIn;
-
-    sum_unidade: fullADDER4bits port map(B, D, carry_unidade, saida1, carry_dezena);
-
-    sum_dezena: fullADDER4bits port map(A, C, carry_dezena, saida2, carry_out);
-
-    --fator de correção 
-
-    fator_correcao: fatorCorrecao port map(saida2, saida1, carry_out, E, F, carryOut);
-
     
+        resultado <= (A + B + carryIn);
+
+        if( resultado > 9) then
+
+            C <= resultado + "0110";
+            carryOut <= '1';
+
+        else
+
+            C <= resultado;
+            carryOut <= '0';
+
+        end if;
+    end process;
+
 
 end arc_fullAdderBCD;
